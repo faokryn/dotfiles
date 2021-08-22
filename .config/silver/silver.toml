@@ -1,0 +1,20 @@
+[[left]]
+name = "env"
+color.background = "white"
+color.foreground = "black" 
+args = ["USER"]
+
+[[left]]
+name = "dir"
+color.background = "blue"
+color.foreground = "white"
+
+[[left]]
+name = "git"
+color.background = "green"
+color.foreground = "white"
+
+[[left]]
+name = "status"
+color.background = "red"
+color.foreground = "white"
