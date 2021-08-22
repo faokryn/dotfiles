@@ -1,0 +1,6 @@
+[alias]
+    br = branch
+    co = checkout
+    cob = checkout -b
+    ls = "!fn() { git log --oneline -n ${1:-5}; }; fn"
+    st = status
