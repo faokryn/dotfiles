@@ -19,12 +19,13 @@ if  which silver &> /dev/null &&
     [ $TERM_EM = "lxterminal" ] ||
     [ $TERM_EM = "sakura" ]
 then
+    export user_at_host=$(echo "$USER@$(hostname -s)")
     source <(silver init)
 else
     DIR_BLUE="\[$(tput setaf 33)\]"
     B="\[$(tput bold)\]"
     RESET="\[$(tput sgr0)\]"
-    export PS1="${B}\u${RESET} [${DIR_BLUE}\w${RESET}] \\$ "
+    export PS1="${B}\u@\h${RESET} [${DIR_BLUE}\w${RESET}] \\$ "
 fi
 
 #######################################
