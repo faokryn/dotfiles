@@ -1,6 +1,5 @@
-[alias]
-    br = branch
-    co = checkout
-    cob = checkout -b
-    ls = "!fn() { git log --oneline -n ${1:-5}; }; fn"
-    st = status
+[include]
+    path = config.d/aliases
+    path = config.d/editor
+    path = config.d/remote_interaction
+    path = config.d/user

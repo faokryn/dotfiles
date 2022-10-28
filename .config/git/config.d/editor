@@ -1,0 +1,61 @@
+# configure Git's behavior when an editor is needed; i.e. for commit messages, difftool, and mergetool
+
+##########
+# editor #
+##########
+
+[core]
+    # use VSCode if available (e.g. workstations) or vim if not (e.g. headless servers)
+    editor = which code &>/dev/null && code -nw "$@" || vim
+
+###################
+# diff & difftool #
+###################
+
+[diff]
+    tool = conditional-difftool
+
+[difftool]
+    prompt = false
+
+[difftool "conditional-difftool"]
+    # use VSCode if available (e.g. workstations) or vimdiff if not (e.g. headless servers)
+    cmd = eval $(git config --get difftool.$(which code &>/dev/null && echo 'vscode-d' || echo 'vimdiff-local-d').cmd)
+
+# local definition mirroring vimdiff to make its cmd accessible. See /usr/libexec/git-core/mergetools/vimdiff
+[difftool "vimdiff-local"]
+    cmd = vimdiff -R -f -d -c 'wincmd l' -c 'cd $GIT_PREFIX' "$LOCAL" "$REMOTE"
+
+[difftool "vscode-d"]
+    cmd = code -nwd $LOCAL $REMOTE
+
+######################
+# merge && mergetool #
+######################
+
+[merge]
+    tool = conditional-mergetool
+
+[mergetool]
+    keepbackup = false
+    prompt = false
+
+[mergetool "conditional-mergetool"]
+    # use VSCode if available (e.g. workstations) or vimdiff if not (e.g. headless servers)
+    cmd = eval $(git config --get mergetool.$(which code &>/dev/null && echo 'vscode-m' || echo 'vimdiff-local-m').cmd)
+
+# local definition mirroring vimdiff to make its cmd accessible. See /usr/libexec/git-core/mergetools/vimdiff
+[mergetool "vimdiff-local-m"]
+    # use vimdiff3 if $BASE is determinable or vimdiff2 if not
+    cmd = eval $(git config --get mergetool.$(false && echo 'vd3-local' || echo 'vd2-local').cmd)
+
+# local definition mirroring vimdiff3 to make its cmd accessible. See /usr/libexec/git-core/mergetools/vimdiff
+[mergetool "vd3-local"]
+    cmd =  vimdiff -f -d -c '4wincmd w | wincmd J' "$LOCAL" "$BASE" "$REMOTE" "$MERGED"
+
+# local definition mirroring vimdiff2 to make its cmd accessible. See /usr/libexec/git-core/mergetools/vimdiff
+[mergetool "vd2-local"]
+    cmd = vimdiff -f -d -c 'wincmd l' "$LOCAL" "$MERGED" "$REMOTE"
+
+[mergetool "vscode-m"]
+    cmd = code -nwm "$LOCAL" "$REMOTE" "$BASE" "$MERGED"

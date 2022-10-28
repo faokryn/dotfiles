@@ -1,0 +1,10 @@
+# configure Git's default behavior when interacting with remotes, i.e. for fetch, pull, and push
+
+[fetch]
+    prune = true
+
+[pull]
+    ff = only
+
+[push]
+    followTags = true
